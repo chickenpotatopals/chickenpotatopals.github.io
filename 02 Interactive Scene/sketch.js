@@ -2,14 +2,29 @@
 // Elijah Biebrick
 // 9/21/2026
 // Make a website with a visual scene, and a character that can be manipulated with user inputs.
-
-
+let bg1 = 85;
+let bg2 = 162;
+let bg3 = 252;
+let currentbg = 1;
 async function setup() {
   createCanvas(windowWidth, windowHeight);
 }
 
 function draw() {
-  background(162, 207, 255);
+  background(bg1, bg2, bg3);
+  fill('yellow');
+  if (currentbg === 1){
+    circle(windowWidth * 0.1, windowHeight * 0.6, 160);
+  }
+  else if (currentbg === 2){
+    circle(windowWidth * 0.3, windowHeight * 0.2, 160);
+  }
+  else if (currentbg === 3){
+    circle(windowWidth * 0.6, windowHeight * 0.2, 160);
+  }
+  else if (currentbg === 4){
+    circle(windowWidth * 0.9, windowHeight * 0.8, 160);
+  }
   noStroke();
   // draw the mcdonalds
   fill(94, 115, 138);
@@ -64,4 +79,32 @@ function draw() {
   circle(mouseX - 8, windowHeight * 0.66, 5);
   arc(mouseX, windowHeight * 0.67, 10, 5, 0, 3.5);
 
+}
+function mousePressed() {
+  if (mouseButton.left === true){
+    if (currentbg === 1){
+      currentbg = 2;
+      bg1 = 173;
+      bg2 = 221;
+      bg3 = 255;
+    }
+    else if (currentbg === 2){
+      currentbg = 3;
+      bg1 = 255;
+      bg2 = 211;
+      bg3 = 216;
+    }
+    else if (currentbg === 3){
+      currentbg = 4;
+      bg1 = 230;
+      bg2 = 84;
+      bg3 = 0;
+    }
+    else if (currentbg === 4){
+      currentbg = 1;
+      bg1 = 85;
+      bg2 = 162;
+      bg3 = 252;
+    }
+  }
 }

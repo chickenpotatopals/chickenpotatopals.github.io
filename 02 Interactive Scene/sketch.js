@@ -2,15 +2,21 @@
 // Elijah Biebrick
 // 9/21/2026
 // Make a website with a visual scene, and a character that can be manipulated with user inputs.
+// These global variables allow for the
+// manipulation of the scene.
 let bg1 = 85;
 let bg2 = 162;
 let bg3 = 252;
 let currentbg = 1;
+let ronaldExpression = 0;
+
 async function setup() {
   createCanvas(windowWidth, windowHeight);
 }
 
 function draw() {
+  // draw the background based on the currentbg,
+  // and draw the sun accordingly.
   background(bg1, bg2, bg3);
   fill('yellow');
   if (currentbg === 1){
@@ -46,6 +52,9 @@ function draw() {
   fill("black");
   rect(windowWidth * 0.15, windowHeight * 0.58, windowWidth * 0.15, windowHeight * 0.15);
   rect(windowWidth * 0.35, windowHeight * 0.58, windowWidth * 0.1, windowHeight * 0.15);
+  // add name for copyright reason
+  textSize(20);
+  text("Elijah Biebrick", 10, windowHeight - 20);
   // draw RONALD MCDONALD
   stroke("black");
   // limb base and feet
@@ -73,15 +82,26 @@ function draw() {
   // red afro of doom
   fill(217, 0, 0);
   arc(mouseX, windowHeight * 0.65, 55, 50, 3, 6.5);
-  // seductive face
-  fill("black");
-  circle(mouseX + 8, windowHeight * 0.66, 5);
-  circle(mouseX - 8, windowHeight * 0.66, 5);
-  arc(mouseX, windowHeight * 0.67, 10, 5, 0, 3.5);
+  // draw face, based on ronaldExpression
+  if(ronaldExpression === 0){
+    fill("black");
+    circle(mouseX + 8, windowHeight * 0.66, 5);
+    circle(mouseX - 8, windowHeight * 0.66, 5);
+    arc(mouseX, windowHeight * 0.67, 10, 5, 0, 3.5);
+  }
+  else if (ronaldExpression === 1){
+    fill("red");
+    circle(mouseX + 8, windowHeight * 0.66, 5);
+    circle(mouseX - 8, windowHeight * 0.66, 5);
+    line(mouseX, windowHeight * 0.66, mouseX + 10, windowHeight * 0.65);
+    line(mouseX, windowHeight * 0.66, mouseX - 10, windowHeight * 0.65);
+    arc(mouseX, windowHeight * 0.67, 10, 5, 3, 0.3);
+  }
 
 }
 function mousePressed() {
-  if (mouseButton.left === true){
+  // when the user middle clicks, it changes the background.
+  if (mouseButton.center === true){
     if (currentbg === 1){
       currentbg = 2;
       bg1 = 173;
@@ -105,6 +125,19 @@ function mousePressed() {
       bg1 = 85;
       bg2 = 162;
       bg3 = 252;
+    }
+  }
+}
+
+function keyPressed(){
+  // when the space bar is pressed, it
+  // changes ronalds expression from happy to ANGERY
+  if (key === " "){
+    if(ronaldExpression === 1){
+      ronaldExpression = 0;
+    }
+    else{
+      ronaldExpression++;
     }
   }
 }

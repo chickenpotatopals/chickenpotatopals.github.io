@@ -26,7 +26,7 @@ function draw() {
 class Ball{
   constructor(x, y){
     this.pos = createVector(x, y);
-    this.vel = createVector(random(1, 10), -5);
+    this.vel = createVector(random(-10, 10), -5);
     this.gravity = createVector(0, random(0.4, 0.6));
     this.force = createVector(0, 0);
     this.bounces = random(10, 20);
@@ -43,6 +43,7 @@ class Ball{
     }
     this.pos.add(this.vel);
     if (this.pos.y > height){
+      this.pos.y = height - 1;
       this.vel.y *= -0.9;
       this.bounces--;
     }
@@ -68,7 +69,7 @@ class Ball{
     // display the ball
     if(this.bounces > 0){
       noStroke();
-      fill(0, 255, 0);
+      fill(400 / this.bounces, 25 * this.bounces, 0);
       circle(this.pos.x, this.pos.y, 20);
       // display the vectors
       if(true){

@@ -10,7 +10,7 @@ let grid = [
   [255, 0,    255, 0,    255, 0  ],
   [255, 255,  255, 255,  255, 255],
   [0,   0,    0,   0,    0,   0  ],
-  [255, 255,  255, 255,  255, 255],
+  [0,   0,    0,   0,    0,   0  ],
 ];
 
 let rows = grid.length;
@@ -19,12 +19,17 @@ let tileSize = 60;
 
 async function setup() {
   createCanvas(cols * tileSize, rows * tileSize);
+  randomize();
 }
 
 function draw() {
   background(220);
   renderGrid();
   drawLocation();
+  drawOverlay();
+  if(checkForWin()){
+    text("YOU WIN!", width / 2, height / 2);
+  }
 }
 
 function mousePressed(){
@@ -37,17 +42,22 @@ function mousePressed(){
     flip(x, y);
 
     // IF THEY EXIST, FLIP THE CARDINAL NEIGHBORS:
-    if (x + 1 <= 5){
-      flip(x + 1, y);
+    if (keyCode === 16 && keyIsPressed){
+      let doNothing = 0;
     }
-    if (x - 1 >= 0){
-      flip(x - 1, y);
-    }
-    if (y + 1 <= 4){
-      flip(x, y + 1);
-    }
-    if (y - 1 >= 0){
-      flip(x, y - 1);
+    else{
+      if (x + 1 <= cols - 1){
+        flip(x + 1, y);
+      }
+      if (x - 1 >= 0){
+        flip(x - 1, y);
+      }
+      if (y + 1 <= rows - 1){
+        flip(x, y + 1);
+      }
+      if (y - 1 >= 0){
+        flip(x, y - 1);
+      }
     }
   }
 }
@@ -91,5 +101,47 @@ function flip(x, y){
   }
   else{
     grid[y][x] = 255;
+  }
+}
+
+function checkForWin(){
+  let longness = grid.length;
+  let whites = 0;
+  let blacks = 0;
+  for (let x = 0; x < longness; x++){
+    for (let y = 0; y < grid[x].length; y++){
+      if (grid[x][y] === 0){
+        blacks++;
+      }
+      else if (grid[x][y] === 255){
+        whites++;
+      }
+    }
+  }
+  if (whites === 30 || blacks === 30){
+    return true;
+  }
+  return false;
+}
+
+function drawOverlay(){
+  fill(0, 255, 0, 150);
+  square(getCurrentX() * tileSize, getCurrentY() * tileSize, tileSize);
+  if (keyCode === 16 && keyIsPressed){
+    let doNothing = 0;
+  }
+  else{
+    square(getCurrentX() * tileSize + tileSize, getCurrentY() * tileSize, tileSize);
+    square(getCurrentX() * tileSize - tileSize, getCurrentY() * tileSize, tileSize);
+    square(getCurrentX() * tileSize, getCurrentY() * tileSize + tileSize, tileSize);
+    square(getCurrentX() * tileSize, getCurrentY() * tileSize - tileSize, tileSize);
+  }
+}
+
+function randomize(){
+  for(let x = 0; x < grid.length; x++){
+    for(let y = 0; y < grid[x].length; y++){
+      grid[x][y] = random([0, 255]);
+    }
   }
 }

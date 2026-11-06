@@ -16,6 +16,7 @@ let grid = [
 let rows = grid.length;
 let cols = grid[0].length;
 let tileSize = 60;
+let shape = 'cross';
 
 async function setup() {
   createCanvas(cols * tileSize, rows * tileSize);
@@ -46,17 +47,30 @@ function mousePressed(){
       let doNothing = 0;
     }
     else{
-      if (x + 1 <= cols - 1){
-        flip(x + 1, y);
+      if (shape === 'cross'){
+        if (x + 1 <= cols - 1){
+          flip(x + 1, y);
+        }
+        if (x - 1 >= 0){
+          flip(x - 1, y);
+        }
+        if (y + 1 <= rows - 1){
+          flip(x, y + 1);
+        }
+        if (y - 1 >= 0){
+          flip(x, y - 1);
+        }
       }
-      if (x - 1 >= 0){
-        flip(x - 1, y);
-      }
-      if (y + 1 <= rows - 1){
-        flip(x, y + 1);
-      }
-      if (y - 1 >= 0){
-        flip(x, y - 1);
+      else{
+        if (x + 1 <= cols - 1){
+          flip(x + 1, y);
+        }
+        if (y + 1 >= 0){
+          flip(x, y + 1);
+        }
+        if (x + 1 <= cols - 1 && y + 1 >= 0){
+          flip(x + 1, y + 1);
+        }
       }
     }
   }
@@ -118,23 +132,30 @@ function checkForWin(){
       }
     }
   }
-  if (whites === 30 || blacks === 30){
+  if (whites === rows*cols || blacks === rows*cols){
     return true;
   }
   return false;
 }
 
 function drawOverlay(){
-  fill(0, 255, 0, 150);
+  fill(0, 255, 0, 100);
   square(getCurrentX() * tileSize, getCurrentY() * tileSize, tileSize);
   if (keyCode === 16 && keyIsPressed){
     let doNothing = 0;
   }
   else{
-    square(getCurrentX() * tileSize + tileSize, getCurrentY() * tileSize, tileSize);
-    square(getCurrentX() * tileSize - tileSize, getCurrentY() * tileSize, tileSize);
-    square(getCurrentX() * tileSize, getCurrentY() * tileSize + tileSize, tileSize);
-    square(getCurrentX() * tileSize, getCurrentY() * tileSize - tileSize, tileSize);
+    if (shape === 'cross'){
+      square(getCurrentX() * tileSize + tileSize, getCurrentY() * tileSize, tileSize);
+      square(getCurrentX() * tileSize - tileSize, getCurrentY() * tileSize, tileSize);
+      square(getCurrentX() * tileSize, getCurrentY() * tileSize + tileSize, tileSize);
+      square(getCurrentX() * tileSize, getCurrentY() * tileSize - tileSize, tileSize);
+    }
+    else{
+      square(getCurrentX() * tileSize, getCurrentY() * tileSize + tileSize, tileSize);
+      square(getCurrentX() * tileSize + tileSize, getCurrentY() * tileSize, tileSize);
+      square(getCurrentX() * tileSize + tileSize, getCurrentY() * tileSize + tileSize, tileSize);
+    }
   }
 }
 
@@ -143,5 +164,17 @@ function randomize(){
     for(let y = 0; y < grid[x].length; y++){
       grid[x][y] = random([0, 255]);
     }
+  }
+}
+
+function keyPressed(){
+  if (key === " "){
+    if (shape === 'cross'){
+      shape = 'cube';
+    }
+    else{
+      shape = 'cross';
+    }
+    console.log(shape);
   }
 }

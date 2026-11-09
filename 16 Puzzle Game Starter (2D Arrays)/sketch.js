@@ -17,6 +17,10 @@ let rows = grid.length;
 let cols = grid[0].length;
 let tileSize = 60;
 let shape = 'cross';
+let moveCount = 0;
+let seconds;
+let minutes;
+let flipping = false;
 
 async function setup() {
   createCanvas(cols * tileSize, rows * tileSize);
@@ -26,52 +30,60 @@ async function setup() {
 function draw() {
   background(220);
   renderGrid();
-  drawLocation();
+  drawMoveCount();
   drawOverlay();
   if(checkForWin()){
     text("YOU WIN!", width / 2, height / 2);
   }
+  let totalSeconds = floor(millis() / 1000);
+  seconds = totalSeconds % 60;
+  minutes = floor(totalSeconds % 3600 / 60);
 }
 
 function mousePressed(){
   // only do a flip if mouse is on the canvas
-  if(mouseX < width && mouseY < height){
-    let x = getCurrentX();
-    let y = getCurrentY();
+  if (flipping === false){
+    if(mouseX < width && mouseY < height){
+      let x = getCurrentX();
+      let y = getCurrentY();
 
-    // ALWAYS:
-    flip(x, y);
+      // ALWAYS:
+      flipping = true;
+      flip(x, y);
+      moveCount++;
 
-    // IF THEY EXIST, FLIP THE CARDINAL NEIGHBORS:
-    if (keyCode === 16 && keyIsPressed){
-      let doNothing = 0;
-    }
-    else{
-      if (shape === 'cross'){
-        if (x + 1 <= cols - 1){
-          flip(x + 1, y);
-        }
-        if (x - 1 >= 0){
-          flip(x - 1, y);
-        }
-        if (y + 1 <= rows - 1){
-          flip(x, y + 1);
-        }
-        if (y - 1 >= 0){
-          flip(x, y - 1);
-        }
+      // IF THEY EXIST, FLIP THE CARDINAL NEIGHBORS:
+      if (keyCode === 16 && keyIsPressed){
+        let doNothing = 0;
       }
       else{
-        if (x + 1 <= cols - 1){
-          flip(x + 1, y);
+        if (shape === 'cross'){
+          if (x + 1 <= cols - 1){
+            flip(x + 1, y);
+          }
+          if (x - 1 >= 0){
+            flip(x - 1, y);
+          }
+          if (y + 1 <= rows - 1){
+            flip(x, y + 1);
+          }
+          if (y - 1 >= 0){
+            flip(x, y - 1);
+          }
         }
-        if (y + 1 >= 0){
-          flip(x, y + 1);
-        }
-        if (x + 1 <= cols - 1 && y + 1 >= 0){
-          flip(x + 1, y + 1);
+        else{
+          if (x + 1 <= cols - 1){
+            flip(x + 1, y);
+          }
+          if (y + 1 >= 0){
+            flip(x, y + 1);
+          }
+          if (x + 1 <= cols - 1 && y + 1 >= 0){
+            flip(x + 1, y + 1);
+          }
         }
       }
+      flipping = false;
     }
   }
 }
@@ -88,12 +100,11 @@ function renderGrid(){
   }
 }
 
-function drawLocation(){
+function drawMoveCount(){
   // draws the row/column of the mouse next to the mouse
-  let constrainedX = constrain(floor(mouseX / 60), 0, floor(width / 60));
-  let constrainedY = constrain(floor(mouseY / 60), 0, floor(height / 60));
   fill("red");
-  text(constrainedX + "," + constrainedY, mouseX, mouseY);
+  text("Moves: " + moveCount, mouseX, mouseY);
+  text("Time: " + minutes + ":" + seconds, mouseX, mouseY + 10);
 }
 
 function getCurrentX(){
@@ -111,9 +122,15 @@ function getCurrentY(){
 function flip(x, y){
   // flips a black square to white, and white square to black
   if (grid[y][x] === 255){
+    for (let i = 0; i < 20; i++){
+      grid[y][x] -= 10;
+    }
     grid[y][x] = 0;
   }
   else{
+    for (let i = 0; i < 20; i++){
+      grid[y][x] += 10;
+    }
     grid[y][x] = 255;
   }
 }

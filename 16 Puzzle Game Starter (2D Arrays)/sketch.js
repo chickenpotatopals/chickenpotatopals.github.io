@@ -21,6 +21,7 @@ let moveCount = 0;
 let seconds;
 let minutes;
 let flipping = false;
+let animationFrame = 0;
 
 async function setup() {
   createCanvas(cols * tileSize, rows * tileSize);
@@ -32,6 +33,13 @@ function draw() {
   renderGrid();
   drawMoveCount();
   drawOverlay();
+  if (flipping && animationFrame < 255){
+    animationFrame += 8.5;
+  }
+  else{
+    animationFrame = 0;
+    flipping = false;
+  }
   if(checkForWin()){
     text("YOU WIN!", width / 2, height / 2);
   }
@@ -83,7 +91,6 @@ function mousePressed(){
           }
         }
       }
-      flipping = false;
     }
   }
 }
@@ -122,16 +129,10 @@ function getCurrentY(){
 function flip(x, y){
   // flips a black square to white, and white square to black
   if (grid[y][x] === 255){
-    for (let i = 0; i < 20; i++){
-      grid[y][x] -= 10;
-    }
-    grid[y][x] = 0;
+    grid[y][x] = animationFrame;
   }
   else{
-    for (let i = 0; i < 20; i++){
-      grid[y][x] += 10;
-    }
-    grid[y][x] = 255;
+    grid[y][x] = map(animationFrame, 0, 255, 255, 0);
   }
 }
 

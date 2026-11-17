@@ -8,32 +8,42 @@ async function loadAssets(){
   hand = await loadImage("/assets/hand.jpg");
   nuit = await loadImage("/assets/nuit.jpg");
   race = await loadImage("/assets/race.jpg");
+  young = await loadImage("/assets/youngelijah.jpg");
+  dumb = await loadImage("/assets/dumbelijah.jpg");
+  stalking = await loadImage("/assets/stalkingkingston.jpg");
 
 }
 
 async function setup() {
   await loadAssets();
   createCanvas(600, 600);
+  myVideo = createCapture(VIDEO);
+  myVideo.hide();
   pixelDensity(1);
+  frameRate(30);
 }
 
 function draw() {
   background(220);
   // image library, uncomment image to pick it
 
+  image(myVideo, 0, 0);
   // image(chip, 0, 0);
-  image(hand, 0, 0);
+  // image(hand, 0, 0);
   // image(nuit, 0, 0);
   // image(race, 0, 0);
+  // image(young, 0, 0);
+  // image(dumb, 0, 0);
+  // image(stalking, 0, 0);
 
   loadPixels();
-  pixels[0] = 255;
   // effect library, uncomment effect to use it
 
   // majorityColor();
   // FUCKRIGHTGREEN();
   // posteriorize();
   theHirror();
+  // theEvilHirror();
 
 
   updatePixels();
@@ -121,6 +131,21 @@ function theHirror(){
       let c = getColors(x, y);
       if (x > 300){
         h = map(x, 300, 600, 300, 0);
+      }
+      else{
+        h = x;
+      }
+      setPixel(h, y, c[0], c[1], c[2]);
+    }
+  }
+}
+
+function theEvilHirror(){
+  for(let x = 0; x < width; x++){
+    for(let y = 0; y < width; y++){
+      let c = getColors(x, y);
+      if (x < 300){
+        h = map(x, 0, 300, 600, 300);
       }
       else{
         h = x;
